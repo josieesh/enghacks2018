@@ -1,0 +1,13 @@
+{"name":"10.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"5GJpzFxg5ORnOQDX"}
+{"name":"02.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"D2fTdSVcmsXUpo8z"}
+{"name":"01.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"GR4CSj45sl1VJQML"}
+{"name":"03.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"SDiZ2QAfICjVM4cE"}
+{"name":"09.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"Ya8cxHAMUgOafaJZ"}
+{"name":"Dilemma1.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"dTkWpRddP1SJvlh2"}
+{"name":"06.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"fHC9Tmz43op4SMO2"}
+{"name":"05.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"pc68Nqp8qdpqSRAs"}
+{"name":"07.jpg","a":0,"b":0,"c":0,"d":0,"e":0,"_id":"qSOgHhn1QUMDtGSc"}
+{"$$indexCreated":{"fieldName":"name","unique":true,"sparse":false}}
+{"name":"07.jpg","a":0,"b":1,"c":0,"d":0,"e":0,"_id":"qSOgHhn1QUMDtGSc"}
+{"name":"10.jpg","a":0,"b":0,"c":1,"d":0,"e":0,"_id":"5GJpzFxg5ORnOQDX"}
+{"name":"03.jpg","a":0,"b":0,"c":0,"d":1,"e":0,"_id":"SDiZ2QAfICjVM4cE"}

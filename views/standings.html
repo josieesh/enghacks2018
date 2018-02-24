@@ -1,0 +1,26 @@
+<nav>
+	<a href="./">Game</a>
+	<a class="active" href="./standings">Standings</a>
+</nav>
+
+{{#if standings}}
+
+	<ul>
+
+		{{#each standings}}
+
+
+			<h2> {{name}} </h2>
+			<li>
+				<p class="up">{{this.a}}</p>
+				<p class="up">{{this.b}}</p>
+				<p class="up">{{this.c}}</p>
+				<p class="up">{{this.d}}</p>
+				<p class="up">{{this.e}}</p>
+			</li>
+
+		{{/each}}
+
+	</ul>
+
+{{/if}}

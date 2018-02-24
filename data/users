@@ -1,0 +1,5 @@
+{"ip":"::1","votes":[],"_id":"eLfkmWsoTGGfmSMS"}
+{"$$indexCreated":{"fieldName":"ip","unique":true,"sparse":false}}
+{"ip":"::1","votes":["qSOgHhn1QUMDtGSc"],"_id":"eLfkmWsoTGGfmSMS"}
+{"ip":"::1","votes":["qSOgHhn1QUMDtGSc","5GJpzFxg5ORnOQDX"],"_id":"eLfkmWsoTGGfmSMS"}
+{"ip":"::1","votes":["qSOgHhn1QUMDtGSc","5GJpzFxg5ORnOQDX","SDiZ2QAfICjVM4cE"],"_id":"eLfkmWsoTGGfmSMS"}

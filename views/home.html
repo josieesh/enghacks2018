@@ -1,0 +1,37 @@
+<nav>
+	<a class="active" href="./">Vote</a>
+	<a href="./standings">Standings</a>
+</nav>
+
+{{#if dilemma}}
+
+	<img src="dilemmas/{{dilemma.name}}" width="530" height="420" />
+
+	<div class="button-holder">
+		<form action="./a" method="post">
+			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input type="submit" value="A" />
+		</form>
+		<form action="./b" method="post">
+			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input type="submit" value="B" />
+		</form>
+		<form action="./c" method="post">
+			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input type="submit" value="C" />
+		</form>
+		<form action="./d" method="post">
+			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input type="submit" value="D" />
+		</form>
+		<form action="./e" method="post">
+			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input type="submit" value="E" />
+		</form>
+	</div>
+
+<!--{{else}}
+
+	<h3>No more photos to vote on! Check out the <a href="./standings">standings</a>.</h3-->
+
+{{/if}}
