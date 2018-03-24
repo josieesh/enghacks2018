@@ -7,7 +7,7 @@ var handlebars = require('express3-handlebars'),
     express = require('express');
 
 // Require()-ing this module will return a function
-// that the index.js file will use to configure the
+// that the server.js file will use to configure the
 // express application
 
 module.exports = function(app){
@@ -19,7 +19,7 @@ module.exports = function(app){
         layoutsDir: __dirname + '/views/layouts'
     }));
 
-    // Set .html as the default template extension 
+    // Set .html as the default template extension
     app.set('view engine', 'html');
 
     // Tell express where it can find the templates

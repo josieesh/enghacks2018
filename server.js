@@ -1,6 +1,6 @@
 /**
  * This is the main file of the application. Run it with the
- * `node index.js` command from your terminal
+ * `node server.js` command from your terminal
  *
  * Remember to run `npm install` in the project folder, so
  * all the required libraries are downloaded and installed.
@@ -22,8 +22,11 @@ require('./config')(app);
 
 require('./routes')(app);
 
+var port = process.env.PORT || 3000;
+app.use(express.static(__dirname + '/public'));
+
 // This file has been called directly with
 // `node index.js`. Start the server!
 
-app.listen(1337);
-console.log('Your application is running on http://localhost:8080');
+app.listen(port);
+console.log('Your application is running on ' +port);
