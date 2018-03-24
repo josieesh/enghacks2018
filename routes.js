@@ -78,10 +78,7 @@ module.exports = function(app){
     });
 
     app.post('/a', vote);
-    app.post('/b', vote);
-    app.post('/c', vote);
-    app.post('/d', vote);
-    app.post('/e', vote);
+    app.post('/b', vote)
 
     function vote(req, res){
 
@@ -89,10 +86,7 @@ module.exports = function(app){
 
         var what = {
             '/a': {a:1},
-            '/b': {b:1},
-            '/c': {c:1},
-            '/d': {d:1},
-            '/e': {e:1}
+            '/b': {b:1}
         };
 
         // Find the dilemma, increment the vote counter and mark that the user has voted on it.

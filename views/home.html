@@ -5,28 +5,29 @@
 
 {{#if dilemma}}
 
-	<img src="dilemmas/{{dilemma.name}}" width="530" height="420" />
+
+<form>
+  Dilemma Number:<br>
+  <input type="text" id="dilemma_number">
+  <br>
+</form>
+
+<script type="text/javascript">
+	var stringToCookie = document.getElementById('dilemma_number').innerHTML;
+	document.getElementById('dilemma_image').src = stringToCookie;
+</script>
+
+
+	<img id="dilemma_image" src="dilemmas/{{dilemma.name}}" width="530" height="50" />
 
 	<div class="button-holder">
 		<form action="./a" method="post">
 			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
-			<input type="submit" value="A" />
+			<input type="submit" value="Agree" />
 		</form>
 		<form action="./b" method="post">
 			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
-			<input type="submit" value="B" />
-		</form>
-		<form action="./c" method="post">
-			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
-			<input type="submit" value="C" />
-		</form>
-		<form action="./d" method="post">
-			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
-			<input type="submit" value="D" />
-		</form>
-		<form action="./e" method="post">
-			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
-			<input type="submit" value="E" />
+			<input type="submit" value="Disagree" />
 		</form>
 	</div>
 
