@@ -5,22 +5,44 @@
 
 {{#if dilemma}}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<form>
+<script type="text/javascript">
+	window.onload=function(){
+		document.getElementById("submit_button").onclick = function(){
+			number = document.getElementById("dilemma_number").value;
+			if (number){
+				url = "dilemmas/"+number+".JPG";
+				document.cookie = "url="+url;
+			}
+		};
+		var img_url = document.cookie.split("=")[1];
+		if(img_url){
+			var http = new XMLHttpRequest();
+
+    	http.open('GET', img_url);
+    	http.send();
+
+	    if(http.status != 404){
+				document.getElementById("voting_buttons").style.display = "block";
+				$("#dilemma_image").attr("src", img_url);
+			}
+		}
+		img_url ="";
+		document.cookie = "url=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+	};
+</script>
+
+<form onsubmit="myFunction(document.getElementById('dilemma_number').value)">
   Dilemma Number:<br>
   <input type="text" id="dilemma_number">
+	<input type="submit" id = "submit_button" value = "Go">
   <br>
 </form>
 
-<script type="text/javascript">
-	var stringToCookie = document.getElementById('dilemma_number').innerHTML;
-	document.getElementById('dilemma_image').src = stringToCookie;
-</script>
+	<img id="dilemma_image" src="default.jpg" width="530" height="50" />
 
-
-	<img id="dilemma_image" src="dilemmas/{{dilemma.name}}" width="530" height="50" />
-
-	<div class="button-holder">
+	<div style="display: none" id="voting_buttons" class="button-holder">
 		<form action="./a" method="post">
 			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
 			<input type="submit" value="Agree" />
