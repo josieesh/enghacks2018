@@ -1,6 +1,5 @@
 <nav>
-	<a class="active" href="./">Individual</a>
-	<a href="./group">Group Cases</a>
+	<a class="active" href="./">Cases</a>
 	<a href="./standings">Standings</a>
 </nav>
 
@@ -11,20 +10,26 @@
 <script type="text/javascript">
 	window.onload=function(){
 		document.getElementById("submit_button").onclick = function(){
-			number = document.getElementById("dilemma_number").value;
+			var number = document.getElementById("dilemma_number").value;
+			var isGroupCase = document.getElementById("groupCaseCheck").checked;
 			if (number){
-				url = "dilemmas/"+number+".JPG";
+				if(isGroupCase){
+					url = "dilemmas/G"+number+".JPG";
+				}
+				else{
+					url = "dilemmas/"+number+".JPG";
+				}
 				document.cookie = "url="+url;
 			}
 		};
 		var img_url = document.cookie.split("=")[1];
 		if(img_url){
-			var http = new XMLHttpRequest();
+			var picCheck = new XMLHttpRequest();
 
-    	http.open('GET', img_url);
-    	http.send();
+    	picCheck.open('GET', img_url);
+    	picCheck.send();
 
-	    if(http.status != 404){
+	    if(picCheck.status != 404){
 				document.getElementById("voting_buttons").style.display = "block";
 				$("#dilemma_image").attr("src", img_url);
 			}
@@ -34,14 +39,17 @@
 	};
 </script>
 
-<form onsubmit="myFunction(document.getElementById('dilemma_number').value)">
-  Dilemma Number:<br>
-  <input type="text" id="dilemma_number">
+<form class = "form2" onsubmit="myFunction(document.getElementById('dilemma_number').value)">
+	<div class = "checkbox1">
+		Group Case: <input type="checkbox" id="groupCaseCheck" value="groupCase">
+	</div>
+
+  Case Number: <input type="text" id="dilemma_number" class="form2text"><br>
 	<input type="submit" id = "submit_button" value = "Go">
   <br>
 </form>
 
-	<img id="dilemma_image" src="default.jpg" width="530" height="50" />
+	<img id="dilemma_image" src="default.jpg" width="530" />
 
 	<div style="display: none" id="voting_buttons" class="button-holder">
 		<form action="./a" method="post">

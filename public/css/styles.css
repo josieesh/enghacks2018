@@ -141,14 +141,45 @@ body > img{
 	opacity:0.9;
 }
 
+.form2{
+	padding:20px;
+	text-align: center;
+	border-radius:3px;
+	padding: 5px 15px;
+	color:#e1ba4c !important;
+	font-weight:bold;
+	max-width: 450px;
+  background: #FAFAFA;
+  padding: 30px;
+  margin: 50px auto;
+  border-radius: 10px;
+  border: 6px solid #45bad3;
+}
 
-/* The Cute! button */
+.form2text {
+    width: 20px;
+		height: 20px;
+}
+
+.form2 [type="submit"] {
+    box-shadow: inset 0px 1px 0px 0px #3985B1;
+    background-color: #45bad3;
+    display: inline-block;
+    cursor: pointer;
+    color: #FFFFFF;
+    padding: 6px 12px;
+    text-decoration: none;
+    font: 12px Arial, Helvetica, sans-serif;
+}
+
+
+/* The agree button */
 
 .button-holder form:first-child input{
 	background: url('../img/sprite.svg') #aadb9c 17px -86px no-repeat;
 }
 
-/* The Not Cute! button */
+/* The disagree button */
 
 .button-holder form:last-child input{
 	background: url('../img/sprite.svg') #f3818d 17px 18px no-repeat;

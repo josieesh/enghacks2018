@@ -47,38 +47,17 @@ module.exports = function(app){
 
             // Sort the dilemmas
 
-            /*all_dilemmas.sort(function(p1, p2){
-                return (p2.likes - p2.dislikes) - (p1.likes - p1.dislikes);
-            });*/
+            all_dilemmas.sort(function(p1, p2){
+              var a = p1.name.toLowerCase();
+              var b = p2.name.toLowerCase();
+              return (a < b) ? -1 : (a > b) ? 1 : 0;
+            });
 
             // Render the standings template and pass the dilemmas
             res.render('standings', { standings: all_dilemmas });
 
         });
 
-    });
-
-    app.get('/group', function(req, res){
-      groupCases.find({}, function(err, all_groupCases){
-
-          // Find the current user
-          users.find({ip: req.ip}, function(err, u){
-
-              var voted_on = [];
-
-              if(u.length == 1){
-                  voted_on = u[0].groupVotes;
-              }
-
-              groupCase_to_show = all_groupCases[Math.floor(Math.random()*all_groupCases.length)];
-
-              console.log(all_groupCases);
-              console.log(groupCase_to_show);
-              res.render('group', { groupCase: groupCase_to_show });
-
-          });
-
-      });
     });
 
     // This is executed before the next two post requests
@@ -88,8 +67,7 @@ module.exports = function(app){
 
         users.insert({
             ip: req.ip,
-            votes: [],
-            groupVotes:[],
+            votes: []
         }, function(){
             // Continue with the other routes
             next();
@@ -127,34 +105,4 @@ module.exports = function(app){
 
         });
     };
-
-    app.post('/aGroup', voteGroup);
-    app.post('/bGroup', voteGroup);
-
-    function voteGroup(req, res){
-      var what = {
-          '/aGroup': {a:1},
-          '/bGroup': {b:1}
-      };
-
-      // Find the dilemma, increment the vote counter and mark that the user has voted on it.
-
-      groupCases.find({ name: req.body.groupCase }, function(err, found){
-
-          if(found.length == 1){
-
-              groupCases.update(found[0], {$inc : what[req.path]});
-
-              users.update({ip: req.ip}, { $addToSet: { groupVotes: found[0]._id}}, function(){
-                  res.redirect('../');
-              });
-
-          }
-          else{
-              res.redirect('../');
-          }
-
-      });
-
-    }
   };
