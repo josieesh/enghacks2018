@@ -1,10 +1,6 @@
-/**
- * This file defines the routes used in your application
- * It requires the database module that we wrote previously.
- */
-
 var db = require('./database'),
     dilemmas = db.dilemmas,
+    groupCases = db.groupCases,
     users = db.users;
 
 module.exports = function(app){
@@ -62,6 +58,29 @@ module.exports = function(app){
 
     });
 
+    app.get('/group', function(req, res){
+      groupCases.find({}, function(err, all_groupCases){
+
+          // Find the current user
+          users.find({ip: req.ip}, function(err, u){
+
+              var voted_on = [];
+
+              if(u.length == 1){
+                  voted_on = u[0].groupVotes;
+              }
+
+              groupCase_to_show = all_groupCases[Math.floor(Math.random()*all_groupCases.length)];
+
+              console.log(all_groupCases);
+              console.log(groupCase_to_show);
+              res.render('group', { groupCase: groupCase_to_show });
+
+          });
+
+      });
+    });
+
     // This is executed before the next two post requests
     app.post('*', function(req, res, next){
 
@@ -69,7 +88,8 @@ module.exports = function(app){
 
         users.insert({
             ip: req.ip,
-            votes: []
+            votes: [],
+            groupVotes:[],
         }, function(){
             // Continue with the other routes
             next();
@@ -78,12 +98,11 @@ module.exports = function(app){
     });
 
     app.post('/a', vote);
-    app.post('/b', vote)
+    app.post('/b', vote);
 
     function vote(req, res){
 
         // Which field to increment, depending on the path
-
         var what = {
             '/a': {a:1},
             '/b': {b:1}
@@ -107,5 +126,35 @@ module.exports = function(app){
             }
 
         });
+    };
+
+    app.post('/aGroup', voteGroup);
+    app.post('/bGroup', voteGroup);
+
+    function voteGroup(req, res){
+      var what = {
+          '/aGroup': {a:1},
+          '/bGroup': {b:1}
+      };
+
+      // Find the dilemma, increment the vote counter and mark that the user has voted on it.
+
+      groupCases.find({ name: req.body.groupCase }, function(err, found){
+
+          if(found.length == 1){
+
+              groupCases.update(found[0], {$inc : what[req.path]});
+
+              users.update({ip: req.ip}, { $addToSet: { groupVotes: found[0]._id}}, function(){
+                  res.redirect('../');
+              });
+
+          }
+          else{
+              res.redirect('../');
+          }
+
+      });
+
     }
   };
