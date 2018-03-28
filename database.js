@@ -23,7 +23,8 @@ dilemmas_on_disk.forEach(function(dilemma){
     dilemmas.insert({
         name: dilemma,
         a: 0,
-        b: 0
+        b: 0,
+        time: 0
     });
 });
 

@@ -86,13 +86,21 @@ module.exports = function(app){
             '/b': {b:1}
         };
 
-        // Find the dilemma, increment the vote counter and mark that the user has voted on it.
+        // Find the dilemma, increment the vote counter and mark that the user has voted on it
+
+        var time = Date();
+        console.log(time);
 
         dilemmas.find({ name: req.body.dilemma }, function(err, found){
 
             if(found.length == 1){
 
                 dilemmas.update(found[0], {$inc : what[req.path]});
+                //dilemmas.update(found[0], {time : time});
+                //var current = dilemmas.find({name: req.body.dilemma});
+                console.log("current:");
+                console.log(found);
+                found.time = time;
 
                 users.update({ip: req.ip}, { $addToSet: { votes: found[0]._id}}, function(){
                     res.redirect('../');

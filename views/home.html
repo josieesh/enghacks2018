@@ -32,6 +32,8 @@
 	    if(picCheck.status != 404){
 				document.getElementById("voting_buttons").style.display = "block";
 				$("#dilemma_image").attr("src", img_url);
+				name = img_url.split("/")[1];
+    		$('input[name=dilemma]').attr("value", name);
 			}
 		}
 		img_url ="";
@@ -53,11 +55,11 @@
 
 	<div style="display: none" id="voting_buttons" class="button-holder">
 		<form action="./a" method="post">
-			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input id="inputvote" type="hidden" name="dilemma" value="{{dilemma.name}}" />
 			<input type="submit" value="Agree" />
 		</form>
 		<form action="./b" method="post">
-			<input type="hidden" name="dilemma" value="{{dilemma.name}}" />
+			<input id="inputvote" type="hidden" name="dilemma" value="{{dilemma.name}}"  />
 			<input type="submit" value="Disagree" />
 		</form>
 	</div>
