@@ -1,75 +1,164 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Place searches</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      
-	</style>
-	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,700" rel="stylesheet" />
-	<link href="css/styles.css" rel="stylesheet" />
-    <script>
-	// This example requires the Places library. Include the libraries=places
-	// parameter when you first load the API. For example:
-	// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-	var map;
-	var infowindow;
-	var da_class = 'display';
-	var number_close_by;
-	var total_results = [];
-	var all_ids = [];
-	
-	function initMap() {
+<head>
 
-		console.log('initMap')
+  <!--<script src="js/lib.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 
-		var city = {lat: 43.653908, lng: -79.3832};
+  <script>
 
-		map = new google.maps.Map(document.getElementById('map'), {
-			center: city,
-			zoom: 15
-		});
+    var map;
+    var infowindow;
+    var da_class = 'display';
+    var number_close_by;
+    var total_results = [];
+    var all_ids = [];
+    var current_card = 0;
 
-		infowindow = new google.maps.InfoWindow();
-		var service = new google.maps.places.PlacesService(map);
-		service.nearbySearch({
-			location: city,
-			radius: 500,
-			type: ['restaurant']
-		}, callback);
-	}
+    function initMap() {
 
-	function callback(results, status) {
-		
-		if (status === google.maps.places.PlacesServiceStatus.OK) {
-			total_results = results;
-		}
-		saveObj();
-	}
+      console.log('initMap')
 
-	function saveObj() {
-		for(var i = 0; i < total_results.length; i++){
-			var obj = { "name":total_results[i].name.toString(), "address":total_results[i].vicinity.toString(), "rating":total_results[i].rating.toString(), "url":(total_results[i].photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600})).toString()};
-			var myJSON = JSON.stringify(obj);
-			all_ids.push((total_results[i].place_id).toString());
-			localStorage.setItem(total_results[i].place_id, myJSON);
-		}
-	}
+      var city = { lat: 43.653908, lng: -79.3832 };
 
-	
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: city,
+        zoom: 15
+      });
 
-    </script>
-  </head>
-  <body>
-	<div id ="main">
-		<div id="map"></div>
-		<canvas id="myCanvas"></canvas>
-	</div>
+      infowindow = new google.maps.InfoWindow();
+      var service = new google.maps.places.PlacesService(map);
+      service.nearbySearch({
+        location: city,
+        radius: 500,
+        type: ['restaurant']
+      }, callback);
+    }
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgRq1iYHYtaAkVf23XJBEAk39R-pAERQw&libraries=places&callback=initMap" async defer></script>
-  </body>
+    function callback(results, status) {
+
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        total_results = results;
+      }
+      saveObj();
+    }
+
+    function saveObj() {
+      for (var i = 0; i < total_results.length; i++) {
+        var obj = { "name": total_results[i].name.toString(), "address": total_results[i].vicinity.toString(), "rating": total_results[i].rating.toString(), "url": (total_results[i].photos[0].getUrl({ 'maxWidth': 600, 'maxHeight': 600 })).toString() };
+        var myJSON = JSON.stringify(obj);
+        all_ids.push((total_results[i].place_id).toString());
+        localStorage.setItem(total_results[i].place_id, myJSON);
+      }
+      localStorage.setItem("current_card", current_card);
+    }
+
+    function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+      });
+
+      google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+      });
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+  <div class="surprise-me">
+    <button class="surprise-me-button"> Surprise Me </button>
+  </div>
+
+  <div class="main-container">
+    <div id="map"></div>
+    <div id="card">
+      <div id="image">
+        <img id="resteraunt-pic">
+      </div>
+      <div id="description">
+      </div>
+      <div id="details"></div>
+    </div>
+    <div class="category-enter">
+      <input type="text" class="category-text" type="text">
+      <button class="category-select"> Configure </button>
+    </div>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgRq1iYHYtaAkVf23XJBEAk39R-pAERQw&libraries=places&callback=initMap"
+    async defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+
+    $(".category-select").click(function () {
+      initMap();
+      console.log(all_ids);
+      let object = JSON.parse(localStorage.getItem(all_ids[0]));
+      document.getElementById("description").innerHTML = object['name'];
+
+      let restPic = document.getElementById("resteraunt-pic");
+      restPic.setAttribute("src", object['url']);
+      restPic.setAttribute("height", "220");
+      restPic.setAttribute("width", "512");
+      document.getElementById("image").appendChild(restPic);
+    });
+
+    $(document).keydown(function (e) {
+      switch (e.which) {
+        case 37: // left
+          $('#card').addClass('animated bounceOutLeft').one('animationend oAnimationEnd mozAnimationEnd webkitAnimationEnd',
+            function () {
+              increment_and_save();
+              update_card_value();
+              $(this).removeClass("animiated bounceOutLeft")
+            });
+          break;
+        case 39: // right
+          $('#card').addClass('animated bounceOutRight').one('animationend oAnimationEnd mozAnimationEnd webkitAnimationEnd',
+            function () {
+              increment_and_save();
+              update_card_value();
+              $(this).removeClass("animiated bounceOutRight")
+            });
+          break;
+        default: return; // exit this handler for other keys
+      }
+      e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+
+    function increment_and_save() {
+      let current_card = localStorage.getItem("current_card");
+      current_card++;
+      localStorage.setItem("current_card", current_card);
+    }
+
+    function update_card_value() {
+      let current_card = localStorage.getItem("current_card");
+      let object = JSON.parse(localStorage.getItem(all_ids[current_card]));
+      document.getElementById("description").innerHTML = object['name'];
+
+      let restPic = document.getElementById("resteraunt-pic");
+      restPic.setAttribute("src", object['url']);
+      restPic.setAttribute("height", "220");
+      restPic.setAttribute("width", "512");
+      document.getElementById("image").appendChild(restPic);
+    }
+
+
+  </script>
+
+</body>
+
 </html>
