@@ -3,7 +3,7 @@
 <head>
 
   <!--<script src="js/lib.js"></script>-->
-  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="public/css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
@@ -17,6 +17,7 @@
     var total_results = [];
     var all_ids = [];
     var current_card = 0;
+    var current_vote_array = [];
 
     function initMap() {
 
@@ -54,6 +55,7 @@
         localStorage.setItem(total_results[i].place_id, myJSON);
       }
       localStorage.setItem("current_card", current_card);
+      localStorage.setItem("current_vote_array", current_vote_array);
     }
 
     function createMarker(place) {
@@ -128,6 +130,7 @@
         case 39: // right
           $('#card').addClass('animated bounceOutRight').one('animationend oAnimationEnd mozAnimationEnd webkitAnimationEnd',
             function () {
+              increment_vote_count();
               increment_and_save();
               update_card_value();
               $(this).removeClass("animiated bounceOutRight")
@@ -137,6 +140,30 @@
       }
       e.preventDefault(); // prevent the default action (scroll / move caret)
     });
+
+    function increment_vote_count() {
+      let current_card = localStorage.getItem("current_card");
+      console.log("current_card ${current_card}")
+      if (typeof current_vote_array[current_card] === 'undefined') {
+        current_vote_array.splice(current_card, 0, 1);
+      } else {
+        current_vote_array[current_card]++;
+      }
+      if (current_vote_array[current_card] >= 3) {
+        lib = lib({ token: 'oPHeCfIJRq8LnoJYuG9TvFgxb7w2JaF4vPaTUMYj_E3H5_nmeHTq1eZIyZvhS8_i' });
+
+        const sms = lib.messagebird.sms['@0.1.3'];
+
+        let object = JSON.parse(localStorage.getItem(all_ids[current_card]));
+        var name = object['name'];
+
+        let result = sms.create({
+          recipient: "16472683922", // (required)
+          body: "The following resteraunt has won: ${name}" // (required)
+        });
+      }
+      localStorage.setItem("current_vote_array", current_vote_array);
+    }
 
     function increment_and_save() {
       let current_card = localStorage.getItem("current_card");
