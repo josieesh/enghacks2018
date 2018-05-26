@@ -1,15 +1,11 @@
-var db = require('./database'),
-    dilemmas = db.dilemmas,
-    groupCases = db.groupCases,
-    users = db.users;
-
 module.exports = function(app){
 
     // Homepage
     app.get('/', function(req, res){
-
+        res.render('home');
         // Find all dilemmas
-        dilemmas.find({}, function(err, all_dilemmas){
+        /*dilemmas.find({}, function(err, all_dilemmas){
+            res.render('home');
 
             // Find the current user
             users.find({ip: req.ip}, function(err, u){
@@ -33,30 +29,11 @@ module.exports = function(app){
                     dilemma_to_show = not_voted_on[Math.floor(Math.random()*not_voted_on.length)];
                 }
 
-                res.render('home', { dilemma: dilemma_to_show });
+                res.render('home');
 
-            });
+            }); 
 
-        });
-
-    });
-
-    app.get('/standings', function(req, res){
-
-        dilemmas.find({}, function(err, all_dilemmas){
-
-            // Sort the dilemmas
-
-            all_dilemmas.sort(function(p1, p2){
-              var a = p1.name.toLowerCase();
-              var b = p2.name.toLowerCase();
-              return (a < b) ? -1 : (a > b) ? 1 : 0;
-            });
-
-            // Render the standings template and pass the dilemmas
-            res.render('standings', { standings: all_dilemmas });
-
-        });
+        }); */
 
     });
 

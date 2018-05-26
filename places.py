@@ -3,28 +3,38 @@ import json
 
 YOUR_API_KEY = 'AIzaSyBgRq1iYHYtaAkVf23XJBEAk39R-pAERQw'
 
-google_places = GooglePlaces(YOUR_API_KEY)
+def get_places(location = 'Toronto, Canada', keyword='Tacos':
 
-# You may prefer to use the text_search API, instead.
-query_result = google_places.nearby_search(
-        location='Toronto, Canada', keyword='Tacos',
-        radius=20000, types=[types.TYPE_FOOD])
-# If types param contains only 1 item the request to Google Places API
-# will be send as type param to fullfil:
-# http://googlegeodevelopers.blogspot.com.au/2016/02/changes-and-quality-improvements-in_16.html
+    google_places = GooglePlaces(YOUR_API_KEY)
 
-if query_result.has_attributions:
-    print query_result.html_attributions
+    # You may prefer to use the text_search API, instead.
+    query_result = google_places.nearby_search(
+            location=location, keyword=keyword,
+            radius=20000, types=[types.TYPE_FOOD])
+    # If types param contains only 1 item the request to Google Places API
+    # will be send as type param to fullfil:
+    # http://googlegeodevelopers.blogspot.com.au/2016/02/changes-and-quality-improvements-in_16.html
 
-place = query_result.places[0]
-place.get_details()
-name = str(place.name)
-location = str(place.geo_location)
-photos = place.photos
-photourl = str(photo.url)
-details = str(place.details)
+    if query_result.has_attributions:
+        print query_result.html_attributions
 
-print(name, location, photo, details)
+    place = query_result.places[0]
+    place.get_details()
+    name = str(place.name)
+    location = str(place.geo_location)
+    photos = place.photos
+    photo_url = ''
+
+
+    for photo in photos:
+        photo.get(maxheight=500, maxwidth=500)
+        photo_url = photo.url
+        if photo_url != None:
+            break
+    json_string = '{"name": "{name}","location": "{loc}","url": "{url}"}'.format(name=name, loc = location, url = photo_url)
+    return json.loads(json_string)
+
+get_place()
 
 """ for place in query_result.places:
     # Returned places from a query are place summaries.

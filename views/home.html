@@ -1,96 +1,74 @@
-<nav>
-	<a class="active" href="./">Cases</a>
-	<a href="./standings">Standings</a>
-</nav>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+	</style>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,700" rel="stylesheet" />
+	<link href="css/styles.css" rel="stylesheet" />
+    <script>
+	// This example requires the Places library. Include the libraries=places
+	// parameter when you first load the API. For example:
+	// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-{{#if dilemma}}
+	var map;
+	var infowindow;
+	
+	function initMap() {
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		var city = {lat: 43.653908, lng: -79.3832};
 
-<script type="text/javascript">
-	window.onload=function(){
-		document.getElementById("submit_button").onclick = function(){
-			var number = document.getElementById("dilemma_number").value;
-			var isGroupCase = document.getElementById("groupCaseCheck").checked;
-			if (number){
-				if(isGroupCase){
-					url = "dilemmas/G"+number+".JPG";
-				}
-				else{
-					url = "dilemmas/"+number+".JPG";
-				}
-				document.cookie = "url="+url;
-			}
-		};
-		var img_url = document.cookie.split("=")[1];
-		if(img_url){
-			var picCheck = new XMLHttpRequest();
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: city,
+			zoom: 15
+		});
 
-    	picCheck.open('GET', img_url);
-    	picCheck.send();
+		infowindow = new google.maps.InfoWindow();
+		var service = new google.maps.places.PlacesService(map);
+		service.nearbySearch({
+			location: city,
+			radius: 500,
+			type: ['store']
+		}, callback);
+	}
 
-	    if(picCheck.status != 404){
-				document.getElementById("voting_buttons").style.display = "block";
-				$("#dilemma_image").attr("src", img_url);
-				name = img_url.split("/")[1];
-    		$('input[name=dilemma]').attr("value", name);
+	function callback(results, status) {
+		if (status === google.maps.places.PlacesServiceStatus.OK) {
+			for (var i = 0; i < results.length; i++) {
+			createMarker(results[i]);
 			}
 		}
-		img_url ="";
-		document.cookie = "url=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-	};
+	}
 
+	function createMarker(place) {
+		var placeLoc = place.geometry.location;
+		var marker = new google.maps.Marker({
+			map: map,
+			position: place.geometry.location
+		});
 
-	var spawn = require('child_process').spawn,
-    py    = spawn('python', ['compute_input.py']),
-    data = [1,2,3,4,5,6,7,8,9],
-	dataString = '';
-	
-	/*Here we are saying that every time our node application receives data from the python process output stream(on 'data'), we want to convert that received data into a string and append it to the overall dataString.*/
-	py.stdout.on('data', function(data){
-	dataString += data.toString();
-	});
-
-	/*Once the stream is done (on 'end') we want to simply log the received data to the console.*/
-	py.stdout.on('end', function(){
-	console.log('Sum of numbers=',dataString);
-	});
-
-	/*We have to stringify the data first otherwise our python process wont recognize it*/
-	py.stdin.write(JSON.stringify(data));
-
-	py.stdin.end();
-
-
-	$.ajax({
-                    type: 'get',
-                    url: '../../../places.py',
-                    data: $(form).serialize(),
-
-
-                    success: function(data, status) {
-
-
-                      var response = JSON.parse(data);
-                      console.log("THe json is "+response.datacenter); //prints undefined
-                      console.log("result is "+data); // prints result is [{"startdate": "07/01/2013", "system": "All", "datacenter": ["las", "sjc"]}]
-
-                      console.log("The status is "+status); // prints The status is success
-                      console.log(data.datacenter); // prints undefined
-</script>
-
-
-	<img id="dilemma_image" src="default.jpg" width="530" />
-
-	<div style="display: none" id="voting_buttons" class="button-holder">
-		<form action="./a" method="post">
-			<input id="inputvote" type="hidden" name="dilemma" value="{{dilemma.name}}" />
-			<input type="submit" value="Agree" />
-		</form>
-		<form action="./b" method="post">
-			<input id="inputvote" type="hidden" name="dilemma" value="{{dilemma.name}}"  />
-			<input type="submit" value="Disagree" />
-		</form>
-	</div>
-
-{{/if}}
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.setContent(place.name);
+			infowindow.open(map, this);
+		});
+	}
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgRq1iYHYtaAkVf23XJBEAk39R-pAERQw&libraries=places&callback=initMap" async defer></script>
+  </body>
+</html>
