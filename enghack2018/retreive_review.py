@@ -36,6 +36,10 @@ DEFAULT_TERM = 'food'
 DEFAULT_LOCATION = 'Toronto, ON'
 SEARCH_LIMIT = 60
 
+def set_term(category):
+    DEFAULT_TERM = category
+    return
+
 
 def request(host, path, api_key, url_params=None):
     """Given your API_KEY, send a GET request to the API.
@@ -178,6 +182,9 @@ def get_reviews(ids):
 
 
 def main():
+
+    set_term("food")
+
     parser = argparse.ArgumentParser(description='Get location and catgory')
 
     parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM,
