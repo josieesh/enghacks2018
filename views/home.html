@@ -7,15 +7,7 @@
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+      
 	</style>
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,700" rel="stylesheet" />
 	<link href="css/styles.css" rel="stylesheet" />
@@ -26,8 +18,14 @@
 
 	var map;
 	var infowindow;
+	var da_class = 'display';
+	var number_close_by;
+	var total_results = [];
+	var all_ids = [];
 	
 	function initMap() {
+
+		console.log('initMap')
 
 		var city = {lat: 43.653908, lng: -79.3832};
 
@@ -41,34 +39,37 @@
 		service.nearbySearch({
 			location: city,
 			radius: 500,
-			type: ['store']
+			type: ['restaurant']
 		}, callback);
 	}
 
 	function callback(results, status) {
+		
 		if (status === google.maps.places.PlacesServiceStatus.OK) {
-			for (var i = 0; i < results.length; i++) {
-			createMarker(results[i]);
-			}
+			total_results = results;
+		}
+		saveObj();
+	}
+
+	function saveObj() {
+		for(var i = 0; i < total_results.length; i++){
+			var obj = { "name":total_results[i].name.toString(), "address":total_results[i].vicinity.toString(), "rating":total_results[i].rating.toString(), "url":(total_results[i].photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600})).toString()};
+			var myJSON = JSON.stringify(obj);
+			all_ids.push((total_results[i].place_id).toString());
+			localStorage.setItem(total_results[i].place_id, myJSON);
 		}
 	}
 
-	function createMarker(place) {
-		var placeLoc = place.geometry.location;
-		var marker = new google.maps.Marker({
-			map: map,
-			position: place.geometry.location
-		});
+	
 
-		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(place.name);
-			infowindow.open(map, this);
-		});
-	}
     </script>
   </head>
   <body>
-    <div id="map"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgRq1iYHYtaAkVf23XJBEAk39R-pAERQw&libraries=places&callback=initMap" async defer></script>
+	<div id ="main">
+		<div id="map"></div>
+		<canvas id="myCanvas"></canvas>
+	</div>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgRq1iYHYtaAkVf23XJBEAk39R-pAERQw&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>

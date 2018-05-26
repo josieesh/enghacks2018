@@ -52,15 +52,15 @@ module.exports = function(app){
 
     });
 
-    app.post('/a', vote);
-    app.post('/b', vote);
+    app.post('/like', vote);
+    app.post('/dislike', vote);
 
     function vote(req, res){
 
         // Which field to increment, depending on the path
         var what = {
-            '/a': {a:1},
-            '/b': {b:1}
+            '/like': {a:1},
+            '/dislike': {b:1}
         };
 
         // Find the dilemma, increment the vote counter and mark that the user has voted on it
