@@ -1,6 +1,41 @@
 /*-------------------------
 	Simple reset
 --------------------------*/
+#map {
+	height: 200px;
+	width: 200px;
+	display: block;
+    margin-left: auto;
+	margin-right: auto;	
+	margin-top: 100px;
+  }
+  /* Optional: Makes the sample page fill the window. */
+  html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+  }
+
+.display {
+	height:250px;
+	width: 250px;
+}
+
+.display img {
+}
+
+.display img {
+}
+
+.display img {
+}
+
+
+
+
+
+
+
 
 
 *{
