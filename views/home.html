@@ -39,17 +39,46 @@
 		img_url ="";
 		document.cookie = "url=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 	};
+
+
+	var spawn = require('child_process').spawn,
+    py    = spawn('python', ['compute_input.py']),
+    data = [1,2,3,4,5,6,7,8,9],
+	dataString = '';
+	
+	/*Here we are saying that every time our node application receives data from the python process output stream(on 'data'), we want to convert that received data into a string and append it to the overall dataString.*/
+	py.stdout.on('data', function(data){
+	dataString += data.toString();
+	});
+
+	/*Once the stream is done (on 'end') we want to simply log the received data to the console.*/
+	py.stdout.on('end', function(){
+	console.log('Sum of numbers=',dataString);
+	});
+
+	/*We have to stringify the data first otherwise our python process wont recognize it*/
+	py.stdin.write(JSON.stringify(data));
+
+	py.stdin.end();
+
+
+	$.ajax({
+                    type: 'get',
+                    url: '../../../places.py',
+                    data: $(form).serialize(),
+
+
+                    success: function(data, status) {
+
+
+                      var response = JSON.parse(data);
+                      console.log("THe json is "+response.datacenter); //prints undefined
+                      console.log("result is "+data); // prints result is [{"startdate": "07/01/2013", "system": "All", "datacenter": ["las", "sjc"]}]
+
+                      console.log("The status is "+status); // prints The status is success
+                      console.log(data.datacenter); // prints undefined
 </script>
 
-<form class = "form2" onsubmit="myFunction(document.getElementById('dilemma_number').value)">
-	<div class = "checkbox1">
-		Group Case: <input type="checkbox" id="groupCaseCheck" value="groupCase">
-	</div>
-
-  Case Number: <input type="text" id="dilemma_number" class="form2text"><br>
-	<input type="submit" id = "submit_button" value = "Go">
-  <br>
-</form>
 
 	<img id="dilemma_image" src="default.jpg" width="530" />
 
